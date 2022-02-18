@@ -19,7 +19,7 @@ const ball = {
     radius : 10,
     velocityX : 5,
     velocityY : 5,
-    speed : 6,
+    speed : 5,
     color : "white"
 }
 
@@ -141,19 +141,10 @@ function update(){
     let player = (ball.x + ball.radius < canvas.width/2) ? user : bot;
     
     // if the ball hits a paddle
-    if(collision(ball,player)){
-        // play sound
+    if(collision(ball,player)){        
         hit.play();
-        // we check where the ball hits the paddle
         let collidePoint = (ball.y - (player.y + player.height/2));
-        // normalize the value of collidePoint, we need to get numbers between -1 and 1.
-        // -player.height/2 < collide Point < player.height/2
         collidePoint = collidePoint / (player.height/2);
-        
-        // when the ball hits the top of a paddle we want the ball, to take a -45degees angle
-        // when the ball hits the center of the paddle we want the ball to take a 0degrees angle
-        // when the ball hits the bottom of the paddle we want the ball to take a 45degrees
-        // Math.PI/4 = 45degrees
         let angleRad = (Math.PI/4) * collidePoint;
         
         // change the X and Y velocity direction
@@ -162,40 +153,34 @@ function update(){
         ball.velocityY = ball.speed * Math.sin(angleRad);
         
         // speed up the ball everytime a paddle hits it.
-        ball.speed += 0.1;
+        ball.speed += 0.3;
     }
 }
 
 // render function, the function that does al the drawing
-function render(){
-    
+function render(){    
     // clear the canvas
-    drawRect(0, 0, canvas.width, canvas.height, "#000");
-    
+    drawRect(0, 0, canvas.width, canvas.height, "#000");    
     // draw the user score to the left
-    drawText(user.score,canvas.width/4,canvas.height/5);
-    
+    drawText(user.score,canvas.width/4,canvas.height/5);    
     // draw the BOT score to the right
-    drawText(bot.score,3*canvas.width/4,canvas.height/5);
-    
+    drawText(bot.score,3*canvas.width/4,canvas.height/5);    
     // draw the net
-    drawNet();
-    
+    drawNet();    
     // draw the user's paddle
-    drawRect(user.x, user.y, user.width, user.height, user.color);
-    
+    drawRect(user.x, user.y, user.width, user.height, user.color);    
     // draw the BOT's paddle
-    drawRect(bot.x, bot.y, bot.width, bot.height, bot.color);
-    
+    drawRect(bot.x, bot.y, bot.width, bot.height, bot.color);    
     // draw the ball
     drawArc(ball.x, ball.y, ball.radius, ball.color);
 }
+
 function game(){
     update();
     render();
 }
 // number of frames per second
-let framePerSecond = 50;
+let framePerSecond = 90;
 
 //call the game function 50 times every 1 Sec
 let loop = setInterval(game,1000/framePerSecond);
